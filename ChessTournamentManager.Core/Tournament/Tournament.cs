@@ -4,7 +4,7 @@ using ChessTournamentManager.Core.User;
 
 namespace ChessTournamentManager.Core.Tournament;
 
-public class Tournament(Guid? id, Event.Event @event, TournamentType type, TournamentFormat format, bool isOpen, int maxPlayers, int requiredReferees, DateTime deadline)
+public class Tournament(Guid? id, Event.Event @event, TournamentType type, TournamentFormat format, bool isOpen, int maxPlayers, int requiredReferees, DateTime deadline, int roundCount)
     : Entity(id), IAuditable, ISoftDeletable
 {
     private Event.Event _event = Guard.Against.Null(@event, nameof(@event));
@@ -13,9 +13,13 @@ public class Tournament(Guid? id, Event.Event @event, TournamentType type, Tourn
     private int _maxPlayers = Guard.Against.OutOfRange(maxPlayers, nameof(maxPlayers), 0, int.MaxValue);
     private int _requiredReferees = Guard.Against.OutOfRange(requiredReferees, nameof(requiredReferees), 0, int.MaxValue);
     private DateTime _deadline = Guard.Against.OutOfRange(deadline, nameof(deadline), DateTime.Now, @event.TimeInformation.StartDate);
+    private int _roundCount = Guard.Against.OutOfRange(roundCount, nameof(roundCount), 0, int.MaxValue);
+    private int _currentRound;
     
     private readonly List<Player> _players = [];
     private readonly List<Referee> _referees = [];
+    private readonly List<Game.Game> _games = [];
+    private readonly List<Sponsor.Sponsor> _sponsors = [];
     
     public Event.Event Event 
     {
@@ -41,8 +45,22 @@ public class Tournament(Guid? id, Event.Event @event, TournamentType type, Tourn
         set => _deadline = Guard.Against.OutOfRange(value, nameof(value), DateTime.Now, Event.TimeInformation.StartDate);
     }
     
+    public int RoundCount 
+    {
+        get => _roundCount;
+        set => _roundCount = Guard.Against.OutOfRange(value, nameof(value), 0, int.MaxValue);
+    }
+    
+    public int CurrentRound 
+    {
+        get => _currentRound;
+        set => _currentRound = Guard.Against.OutOfRange(value, nameof(value), _currentRound + 1, RoundCount);
+    }
+    
     public IReadOnlyCollection<Player> Players => _players.AsReadOnly();
     public IReadOnlyCollection<Referee> Referees => _referees.AsReadOnly();
+    public IReadOnlyCollection<Game.Game> Games => _games.AsReadOnly();
+    public IReadOnlyCollection<Sponsor.Sponsor> Sponsors => _sponsors.AsReadOnly();
     
     public bool IsOpen { get; set; } = isOpen;
     
@@ -121,5 +139,101 @@ public class Tournament(Guid? id, Event.Event @event, TournamentType type, Tourn
         }
         
         _referees.Remove(referee);
+    }
+    
+    public void AddGame(Game.Game game)
+    {
+        Guard.Against.Null(game, nameof(game));
+        
+        if (_games.Contains(game))
+        {
+            throw new InvalidOperationException("The game is already registered.");
+        }
+        
+        _games.Add(game);
+    }
+    
+    public void RemoveGame(Game.Game game)
+    {
+        Guard.Against.Null(game, nameof(game));
+        
+        if (!_games.Contains(game))
+        {
+            throw new InvalidOperationException("The game is not registered.");
+        }
+        
+        _games.Remove(game);
+    }
+    
+    public void AddSponsor(Sponsor.Sponsor sponsor)
+    {
+        Guard.Against.Null(sponsor, nameof(sponsor));
+        
+        if (_sponsors.Contains(sponsor))
+        {
+            throw new InvalidOperationException("The sponsor is already registered.");
+        }
+        
+        _sponsors.Add(sponsor);
+    }
+    
+    public void RemoveSponsor(Sponsor.Sponsor sponsor)
+    {
+        Guard.Against.Null(sponsor, nameof(sponsor));
+        
+        if (!_sponsors.Contains(sponsor))
+        {
+            throw new InvalidOperationException("The sponsor is not registered.");
+        }
+        
+        _sponsors.Remove(sponsor);
+    }
+    
+    public bool CanRegister(Player player)
+    {
+        Guard.Against.Null(player, nameof(player));
+        
+        if (_players.Count == _maxPlayers)
+        {
+            return false;
+        }
+        
+        if (_players.Contains(player))
+        {
+            return false;
+        }
+        
+        return IsOpen || !string.IsNullOrEmpty(player.FideId);
+    }
+    
+    public bool CanRegister(Referee referee)
+    {
+        Guard.Against.Null(referee, nameof(referee));
+        
+        if (_referees.Count == _requiredReferees)
+        {
+            return false;
+        }
+        
+        return !_referees.Contains(referee);
+    }
+    
+    public bool CanUnregister(Player player)
+    {
+        Guard.Against.Null(player, nameof(player));
+        
+        return _players.Contains(player);
+    }
+    
+    public bool CanUnregister(Referee referee)
+    {
+        Guard.Against.Null(referee, nameof(referee));
+        
+        return _referees.Contains(referee);
+    }
+    
+    public bool CanStart()
+    {
+        return _players.Count == _maxPlayers && _referees.Count == _requiredReferees;
     }
 }

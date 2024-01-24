@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChessTournamentManager.Core.Base;
 
@@ -11,8 +12,13 @@ public interface ISoftDeletable
 
 public abstract class Entity(Guid? id) : IEquatable<Entity>
 {
+    private readonly List<DomainEvent> _domainEvents = [];
+    
     [Key]
     public Guid Id { get; } = id ?? Guid.NewGuid();
+    
+    [NotMapped]
+    public IEnumerable<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public static bool operator ==(Entity? left, Entity? right) =>
         left switch
@@ -28,9 +34,12 @@ public abstract class Entity(Guid? id) : IEquatable<Entity>
     public override bool Equals(object? obj) => Equals(obj as Entity);
 
     public override int GetHashCode() => Id.GetHashCode();
-    
+
     public bool Equals(Entity? other) =>
         other is not null 
         && GetType() == other.GetType()
         && Id == other.Id;
+
+    protected void RegisterDomainEvent(DomainEvent domainEvent) => _domainEvents.Add(domainEvent);
+    internal void ClearDomainEvents() => _domainEvents.Clear();
 }

@@ -4,12 +4,12 @@ namespace ChessTournamentManager.Core.Base;
 
 public interface IDomainEventDispatcher
 {
-    Task DispatchAsync(IEnumerable<AggregateRoot> entities);
+    Task DispatchAsync(IEnumerable<Entity> entities);
 }
 
 public class DomainEventDispatcher(IPublisher mediator) : IDomainEventDispatcher
 {
-    public async Task DispatchAsync(IEnumerable<AggregateRoot> entities)
+    public async Task DispatchAsync(IEnumerable<Entity> entities)
     {
         foreach (var entity in entities)
         {

@@ -4,7 +4,7 @@ using ChessTournamentManager.Core.User;
 
 namespace ChessTournamentManager.Core.Organization;
 
-public class Organization(Guid? id, string name, string? description, string email, Organizer owner) : AggregateRoot(id), IAuditable, ISoftDeletable
+public class Organization(Guid? id, string name, string? description, string email, Organizer owner) : Entity(id), IAuditable, ISoftDeletable
 {
     private string _name = Guard.Against.NullOrWhiteSpace(name);
     private string _email = Guard.Against.NullOrWhiteSpace(email);

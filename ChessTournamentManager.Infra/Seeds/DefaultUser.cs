@@ -7,11 +7,8 @@ public static class DefaultUser
 {
     public static async Task SeedAsync(this UserManager<ApplicationUser> userManager)
     {
-        var defaultUser = new ApplicationUser
+        var defaultUser = new ApplicationUser("ADMIN", "ADMIN")
         {   
-            FirstName = "",
-            LastName = "",
-            UserName = "admin",
             Email = "admin@localhost",
             EmailConfirmed = true
         };

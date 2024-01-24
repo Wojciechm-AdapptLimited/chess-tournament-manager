@@ -1,6 +1,5 @@
 using ChessTournamentManager.Core.User;
 using Microsoft.AspNetCore.Identity;
-using ChessTournamentManager.Data;
 
 namespace ChessTournamentManager.Components.Account;
 

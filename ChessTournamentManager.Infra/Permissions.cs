@@ -3,12 +3,7 @@ namespace ChessTournamentManager.Data;
 public static class Permissions
 {
     private const string GroupName = "Permissions";
-    
-    public enum Module
-    {
-        Users,
-    }
-    
+
     public enum Permission
     {
         Create,
@@ -19,13 +14,13 @@ public static class Permissions
     
     public static string[] GeneratePermissionsForModule(Module module)
     {
-        return new[]
-        {
+        return
+        [
             GeneratePermission(module, Permission.Create),
             GeneratePermission(module, Permission.Read),
             GeneratePermission(module, Permission.Update),
             GeneratePermission(module, Permission.Delete)
-        }; 
+        ]; 
     }
     public static string GeneratePermission(Module module, Permission permission) => $"{GroupName}.{module}.{permission}";
 }

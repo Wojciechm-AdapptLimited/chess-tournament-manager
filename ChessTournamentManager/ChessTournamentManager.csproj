@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../ChessTournamentManager.Client/ChessTournamentManager.Client.csproj" />
-    <ProjectReference Include="../ChessTournamentManager.Data/ChessTournamentManager.Data.csproj" />
+    <ProjectReference Include="..\ChessTournamentManager.Infra\ChessTournamentManager.Infra.csproj" />
   </ItemGroup>
 
 </Project>

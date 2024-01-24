@@ -27,7 +27,7 @@ builder.Logging.AddSerilog(logger);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString, action => action.MigrationsAssembly("ChessTournamentManager.Data")));
+    options.UseNpgsql(connectionString, action => action.MigrationsAssembly("ChessTournamentManager.Infra")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 #region Authentication and Authorization

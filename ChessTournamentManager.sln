@@ -6,7 +6,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessTournamentManager", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessTournamentManager.Client", "ChessTournamentManager.Client\ChessTournamentManager.Client.csproj", "{38705126-51CE-4C65-B4A6-D463A4049D8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessTournamentManager.Data", "ChessTournamentManager.Data\ChessTournamentManager.Data.csproj", "{70635FFB-BD3C-43AE-93E8-5D21F90387D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessTournamentManager.Infra", "ChessTournamentManager.Infra\ChessTournamentManager.Infra.csproj", "{70635FFB-BD3C-43AE-93E8-5D21F90387D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessTournamentManager.Core", "ChessTournamentManager.Core\ChessTournamentManager.Core.csproj", "{3C7E58BD-7277-40D8-A483-425B2CE62A27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,18 @@ Global
 		{70635FFB-BD3C-43AE-93E8-5D21F90387D5}.Release|x64.Build.0 = Release|Any CPU
 		{70635FFB-BD3C-43AE-93E8-5D21F90387D5}.Release|x86.ActiveCfg = Release|Any CPU
 		{70635FFB-BD3C-43AE-93E8-5D21F90387D5}.Release|x86.Build.0 = Release|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Debug|x64.Build.0 = Debug|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Debug|x86.Build.0 = Debug|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Release|x64.ActiveCfg = Release|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Release|x64.Build.0 = Release|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Release|x86.ActiveCfg = Release|Any CPU
+		{3C7E58BD-7277-40D8-A483-425B2CE62A27}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

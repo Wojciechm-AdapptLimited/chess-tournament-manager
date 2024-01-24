@@ -4,7 +4,7 @@ using ChessTournamentManager.Core.Base;
 namespace ChessTournamentManager.Core.Event;
 
 public class Event(Guid? id, Organization.Organization organization, string name, string? description, Location location, TimeInformation timeInformation)
-    : Entity(id), ISoftDeletable
+    : Entity(id), IAuditable, ISoftDeletable
 {
     private string _name = Guard.Against.NullOrWhiteSpace(name);
     private Location _location = Guard.Against.Null(location, nameof(location));

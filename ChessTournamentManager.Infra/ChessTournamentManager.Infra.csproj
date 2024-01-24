@@ -15,4 +15,8 @@
       <Folder Include="Migrations\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ChessTournamentManager.Core\ChessTournamentManager.Core.csproj" />
+    </ItemGroup>
+
 </Project>

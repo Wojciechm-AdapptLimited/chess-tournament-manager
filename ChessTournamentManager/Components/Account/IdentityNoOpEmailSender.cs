@@ -1,3 +1,4 @@
+using ChessTournamentManager.Core.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ChessTournamentManager.Data;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using ChessTournamentManager.Components.Account.Pages;
 using ChessTournamentManager.Components.Account.Pages.Manage;
-using ChessTournamentManager.Data;
+using ChessTournamentManager.Core.User;
 
 namespace Microsoft.AspNetCore.Routing;
 

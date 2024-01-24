@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ChessTournamentManager.Components;
 using ChessTournamentManager.Components.Account;
+using ChessTournamentManager.Core.User;
 using ChessTournamentManager.Data;
 using Serilog;
 
@@ -32,7 +33,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 #region Authentication and Authorization
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();

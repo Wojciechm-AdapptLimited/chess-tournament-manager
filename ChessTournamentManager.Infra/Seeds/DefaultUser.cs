@@ -1,3 +1,4 @@
+using ChessTournamentManager.Core.User;
 using Microsoft.AspNetCore.Identity;
 
 namespace ChessTournamentManager.Data.Seeds;
@@ -7,7 +8,9 @@ public static class DefaultUser
     public static async Task SeedAsync(this UserManager<ApplicationUser> userManager)
     {
         var defaultUser = new ApplicationUser
-        {
+        {   
+            FirstName = "",
+            LastName = "",
             UserName = "admin",
             Email = "admin@localhost",
             EmailConfirmed = true

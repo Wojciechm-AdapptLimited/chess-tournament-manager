@@ -2,6 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChessTournamentManager.Core.Base;
 
+public interface IAuditable;
+
+public interface ISoftDeletable
+{
+    bool IsDeleted { get; set; } 
+}
+
 public abstract class Entity(Guid? id) : IEquatable<Entity>
 {
     [Key]

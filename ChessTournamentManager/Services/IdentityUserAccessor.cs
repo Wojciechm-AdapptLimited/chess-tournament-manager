@@ -1,7 +1,7 @@
 using ChessTournamentManager.Core.User;
 using Microsoft.AspNetCore.Identity;
 
-namespace ChessTournamentManager.Components.Account;
+namespace ChessTournamentManager.Services;
 
 internal sealed class IdentityUserAccessor(UserManager<ApplicationUser> userManager, IdentityRedirectManager redirectManager)
 {

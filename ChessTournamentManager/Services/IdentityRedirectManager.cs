@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Components;
 
-namespace ChessTournamentManager.Components.Account;
+namespace ChessTournamentManager.Services;
 
 internal sealed class IdentityRedirectManager(NavigationManager navigationManager)
 {

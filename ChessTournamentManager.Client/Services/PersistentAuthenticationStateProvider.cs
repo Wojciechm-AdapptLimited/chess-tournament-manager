@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ChessTournamentManager.Client;
+namespace ChessTournamentManager.Client.Services;
 
 // This is a client-side AuthenticationStateProvider that determines the user's authentication state by
 // looking for data persisted in the page when it was rendered on the server. This authentication state will
@@ -14,10 +14,8 @@ namespace ChessTournamentManager.Client;
 // cookie that will be included on HttpClient requests to the server.
 internal class PersistentAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private static readonly Task<AuthenticationState> defaultUnauthenticatedTask =
+    private readonly Task<AuthenticationState> _authenticationStateTask = 
         Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
-
-    private readonly Task<AuthenticationState> authenticationStateTask = defaultUnauthenticatedTask;
 
     public PersistentAuthenticationStateProvider(PersistentComponentState state)
     {
@@ -31,10 +29,10 @@ internal class PersistentAuthenticationStateProvider : AuthenticationStateProvid
             new Claim(ClaimTypes.Name, userInfo.Email),
             new Claim(ClaimTypes.Email, userInfo.Email) ];
 
-        authenticationStateTask = Task.FromResult(
+        _authenticationStateTask = Task.FromResult(
             new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims,
                 authenticationType: nameof(PersistentAuthenticationStateProvider)))));
     }
 
-    public override Task<AuthenticationState> GetAuthenticationStateAsync() => authenticationStateTask;
+    public override Task<AuthenticationState> GetAuthenticationStateAsync() => _authenticationStateTask;
 }

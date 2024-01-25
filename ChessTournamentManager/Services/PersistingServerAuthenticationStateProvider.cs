@@ -1,13 +1,13 @@
 using System.Diagnostics;
+using ChessTournamentManager.Client;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using ChessTournamentManager.Client;
 
-namespace ChessTournamentManager.Components.Account;
+namespace ChessTournamentManager.Services;
 
 // This is a server-side AuthenticationStateProvider that uses PersistentComponentState to flow the
 // authentication state to the client which is then fixed for the lifetime of the WebAssembly application.

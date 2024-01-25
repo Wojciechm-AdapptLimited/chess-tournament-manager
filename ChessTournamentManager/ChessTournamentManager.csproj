@@ -25,4 +25,56 @@
     <ProjectReference Include="..\ChessTournamentManager.Infra\ChessTournamentManager.Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Templates\email.html" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Error.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Home.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Weather.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Account\Pages\AccessDenied.razor" />
+    <AdditionalFiles Include="Account\Pages\ConfirmEmail.razor" />
+    <AdditionalFiles Include="Account\Pages\ConfirmEmailChange.razor" />
+    <AdditionalFiles Include="Account\Pages\ExternalLogin.razor" />
+    <AdditionalFiles Include="Account\Pages\ForgotPassword.razor" />
+    <AdditionalFiles Include="Account\Pages\ForgotPasswordConfirmation.razor" />
+    <AdditionalFiles Include="Account\Pages\InvalidPasswordReset.razor" />
+    <AdditionalFiles Include="Account\Pages\InvalidUser.razor" />
+    <AdditionalFiles Include="Account\Pages\Lockout.razor" />
+    <AdditionalFiles Include="Account\Pages\Login.razor" />
+    <AdditionalFiles Include="Account\Pages\LoginWith2fa.razor" />
+    <AdditionalFiles Include="Account\Pages\LoginWithRecoveryCode.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\ChangePassword.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\DeletePersonalData.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\Disable2fa.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\Email.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\EnableAuthenticator.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\ExternalLogins.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\GenerateRecoveryCodes.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\Index.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\PersonalData.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\ResetAuthenticator.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\SetPassword.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\TwoFactorAuthentication.razor" />
+    <AdditionalFiles Include="Account\Pages\Manage\_Imports.razor" />
+    <AdditionalFiles Include="Account\Pages\Register.razor" />
+    <AdditionalFiles Include="Account\Pages\RegisterConfirmation.razor" />
+    <AdditionalFiles Include="Account\Pages\ResendEmailConfirmation.razor" />
+    <AdditionalFiles Include="Account\Pages\ResetPassword.razor" />
+    <AdditionalFiles Include="Account\Pages\ResetPasswordConfirmation.razor" />
+    <AdditionalFiles Include="Account\Pages\_Imports.razor" />
+    <AdditionalFiles Include="Account\Shared\AccountLayout.razor" />
+    <AdditionalFiles Include="Account\Shared\ExternalLoginPicker.razor" />
+    <AdditionalFiles Include="Account\Shared\ManageLayout.razor" />
+    <AdditionalFiles Include="Account\Shared\ManageNavMenu.razor" />
+    <AdditionalFiles Include="Account\Shared\ShowRecoveryCodes.razor" />
+    <AdditionalFiles Include="Account\Shared\StatusMessage.razor" />
+    <AdditionalFiles Include="Layout\MainLayout.razor" />
+    <AdditionalFiles Include="Layout\NavMenu.razor" />
+    <AdditionalFiles Include="Pages\Error.razor" />
+    <AdditionalFiles Include="Pages\Home.razor" />
+    <AdditionalFiles Include="Pages\Weather.razor" />
+  </ItemGroup>
+
 </Project>

@@ -1,12 +1,12 @@
-using ChessTournamentManager.Core.User;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using ChessTournamentManager.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using ChessTournamentManager.Core.User;
 
-namespace ChessTournamentManager.Components.Account;
+namespace ChessTournamentManager.Infra;
 
 // Remove the "else if (EmailSender is IdentityNoOpEmailSender)" block from RegisterConfirmation.razor after updating with a real implementation.
-internal sealed class IdentityNoOpEmailSender(IWebHostEnvironment environment) : IEmailSender<ApplicationUser>
+public sealed class IdentityNoOpEmailSender(IWebHostEnvironment environment) : IEmailSender<ApplicationUser>
 {
     private readonly IEmailSender _emailSender = new NoOpEmailSender();
 

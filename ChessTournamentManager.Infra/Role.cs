@@ -1,4 +1,4 @@
-namespace ChessTournamentManager.Data;
+namespace ChessTournamentManager.Infra;
 
 public enum Role
 {
@@ -6,5 +6,4 @@ public enum Role
     Player,
     Organizer,
     Referee,
-    Guest
 }

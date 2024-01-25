@@ -1,4 +1,4 @@
-namespace ChessTournamentManager.Data;
+namespace ChessTournamentManager.Infra;
 
 public static class Permissions
 {

@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
-namespace ChessTournamentManager.Data.Seeds;
+namespace ChessTournamentManager.Infra.Seeds;
 
 public static class DefaultClaims
 {

@@ -1,7 +1,7 @@
 using ChessTournamentManager.Core.User;
 using Microsoft.AspNetCore.Identity;
 
-namespace ChessTournamentManager.Data.Seeds;
+namespace ChessTournamentManager.Infra.Seeds;
 
 public static class DefaultUser
 {

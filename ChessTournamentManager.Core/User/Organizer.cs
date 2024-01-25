@@ -2,7 +2,7 @@ using Ardalis.GuardClauses;
 
 namespace ChessTournamentManager.Core.User;
 
-public class Organizer(string firstName, string lastName) : ApplicationUser(firstName, lastName)
+public class Organizer : ApplicationUser
 {
     private readonly List<Organization.Organization> _organizations = [];
     

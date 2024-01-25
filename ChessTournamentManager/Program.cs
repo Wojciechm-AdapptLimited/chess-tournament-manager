@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ChessTournamentManager;
-using ChessTournamentManager.Account;
 using ChessTournamentManager.Endpoints;
 using ChessTournamentManager.Services;
 using ChessTournamentManager.Core.User;
@@ -29,7 +28,7 @@ builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString, action => action.MigrationsAssembly("ChessTournamentManager.Infra")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

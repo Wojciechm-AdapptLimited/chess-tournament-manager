@@ -2,7 +2,7 @@ using Ardalis.GuardClauses;
 
 namespace ChessTournamentManager.Core.User;
 
-public class Player(string firstName, string lastName, string? fideId) : ApplicationUser(firstName, lastName)
+public class Player(string? fideId) : ApplicationUser
 {
     private string? _fideId = fideId is null ? null : Guard.Against.NullOrWhiteSpace(fideId, nameof(fideId));
     

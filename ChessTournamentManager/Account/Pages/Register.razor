@@ -1,168 +1,160 @@
-﻿@page "/Account/Register"
+﻿@page "/register"
+@rendermode InteractiveServer
 
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
-@using ChessTournamentManager.Core.User
-@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
-@using ChessTournamentManager.Infra
+@using Microsoft.AspNetCore.Identity
+@using Serilog
+@using ChessTournamentManager.Core.User
 @using ChessTournamentManager.Services
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
+@inject IUserEmailStore<ApplicationUser> UserEmailStore
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IEmailSender<ApplicationUser> EmailSender
-@inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
 <PageTitle>Register</PageTitle>
 
-<h1>Register</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <StatusMessage Message="@Message" />
-        <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-            <DataAnnotationsValidator />
-            <h2>Create a new account.</h2>
-            <hr />
-            <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="John" />
-                <label for="first-name">First Name</label>
-                <ValidationMessage For="() => Input.FirstName" class="text-danger" /> 
+<MudPaper MinHeight="500px" MaxWidth="1000px" Elevation="5" Class="p-5 m-auto d-flex">
+    @if (!_registrationSuccessful)
+    {
+        <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register"
+                  class="w-50 h-100">
+            <DataAnnotationsValidator/>
+            <h2>Create a new account</h2>
+            <hr/>
+            <div class="d-flex flex-column justify-content-around">
+                <div class="mb-3">
+                    <div class="d-flex gap-4 justify-content-between">
+                        <MudTextField Label="First Name" @bind-Value="Input.FirstName" HelperText="Max. 50 characters"
+                                      For="@(() => Input.FirstName)"/>
+                        <MudTextField Label="Last Name" @bind-Value="Input.LastName" HelperText="Max. 50 characters"
+                                      For="@(() => Input.LastName)"/>    
+                    </div>
+                    <MudTextField Label="Email" @bind-Value="Input.Email" HelperText="Enter your email address"
+                                  For="@(() => Input.Email)" InputType="InputType.Email"/>
+                    <MudTextField Label="Password" @bind-Value="Input.Password" HelperText="Choose a strong password"
+                                  For="@(() => Input.Password)" InputType="InputType.Password"/>
+                    <MudTextField Label="Confirm Password" @bind-Value="Input.ConfirmPassword" HelperText="Confirm your password"
+                                  For="@(() => Input.ConfirmPassword)" InputType="InputType.Password"/>
+                </div>
+                <div class="w-100 d-flex flex-column justify-content-center align-items-center mt-3 gap-3">
+                    <MudButton Size="Size.Large" FullWidth="true" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+                        Register
+                    </MudButton>
+                    <p>
+                        Been here before? 
+                        <MudLink Color="Color.Primary"
+                                 Href="@NavigationManager.GetUriWithQueryParameters("login", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl })">
+                            Log in
+                        </MudLink> 
+                    </p>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" placeholder="Doe" />
-                <label for="last-name">Last Name</label>
-                <ValidationMessage For="() => Input.LastName" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label for="email">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="password">Password</label>
-                <ValidationMessage For="() => Input.Password" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="confirm-password">Confirm Password</label>
-                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
-            </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </EditForm>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
-    </div>
-</div>
+    }
+    else
+    {
+        <h2>Account created successfully</h2>
+        <p>
+            You have successfully created an account. Please check your email inbox for a confirmation link.
+        </p> 
+    }
+    <MudPaper Elevation="0" Width="50%" Class="mx-3 d-flex align-items-center">
+        <img src="images/35585.jpg" alt="Chess pieces" class="w-100 object-fit-contain"/>
+    </MudPaper>
+</MudPaper>
 
 @code {
-    private IEnumerable<IdentityError>? identityErrors;
+    private bool _registrationSuccessful;
+    
+    [SupplyParameterFromForm] private InputModel Input { get; set; } = new();
 
-    [SupplyParameterFromForm]
-    private InputModel Input { get; set; } = new();
+    [SupplyParameterFromQuery] private string? ReturnUrl { get; set; }
 
-    [SupplyParameterFromQuery]
-    private string? ReturnUrl { get; set; }
-
-    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+    protected override void OnInitialized()
+    {
+        Input = new InputModel(); 
+    }
 
     public async Task RegisterUser(EditContext editContext)
     {
-        var user = CreateUser();
+        var user = Activator.CreateInstance<ApplicationUser>();
 
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-        var emailStore = GetEmailStore();
-        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+        await UserEmailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+        
+        user.FirstName = Input.FirstName;
+        user.LastName = Input.LastName;
+        
         var result = await UserManager.CreateAsync(user, Input.Password);
 
         if (!result.Succeeded)
         {
-            identityErrors = result.Errors;
             return;
         }
 
-        Logger.LogInformation("User created a new account with password.");
-
-        var userId = await UserManager.GetUserIdAsync(user);
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
-
-        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        Log.Information("User created a new account with password.");
 
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
         {
-            RedirectManager.RedirectTo(
-                "Account/RegisterConfirmation",
-                new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
+            await SendConfirmationEmail(user);
+            
+            _registrationSuccessful = true;
+            return;
         }
 
         await SignInManager.SignInAsync(user, isPersistent: false);
         RedirectManager.RedirectTo(ReturnUrl);
     }
 
-    private ApplicationUser CreateUser()
+    private async Task SendConfirmationEmail(ApplicationUser user)
     {
-        try
-        {
-            return Activator.CreateInstance<ApplicationUser>();
-        }
-        catch
-        {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
-        }
-    }
+        var userId = await UserManager.GetUserIdAsync(user);
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+            NavigationManager.ToAbsoluteUri("/email-confirm").AbsoluteUri,
+            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
 
-    private IUserEmailStore<ApplicationUser> GetEmailStore()
-    {
-        if (!UserManager.SupportsUserEmail)
-        {
-            throw new NotSupportedException("The default UI requires a user store with email support.");
-        }
-        return (IUserEmailStore<ApplicationUser>)UserStore;
+        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
     }
 
     private sealed class InputModel
     {
-        [Required]
+        [Required(ErrorMessage = "First name is required")]
         [DataType(DataType.Text)]
+        [MaxLength(50, ErrorMessage = "First name cannot be longer than 50 characters")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; } = "";
         
-        [Required]
+        [Required(ErrorMessage = "Last name is required")]
         [DataType(DataType.Text)]
+        [MaxLength(50, ErrorMessage = "Last name cannot be longer than 50 characters")]
         [Display(Name = "Last Name")]
         public string LastName { get; set; } = "";
         
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Not a valid email address")]
         [Display(Name = "Email")]
         public string Email { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,64}$",
-            ErrorMessage = "Password is not valid, it must be between 8 - 64 characters and contain a number and a capital letter and special character")]
+            ErrorMessage = "Password is not valid, it must be between 8 - 64 characters and contain a number, a capital letter, and a special character")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; } = "";
-
+        
+        [Required(ErrorMessage = "You must confirm your password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
     }
 }

@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Serilog;
 
 namespace ChessTournamentManager.Endpoints;
 
-internal static class IdentityComponentsEndpointRouteBuilderExtensions
+internal static class IdentityEndpoints
 {
     // These endpoints are required by the Identity Razor components defined in the /Components/Account/Pages directory of this project.
     public static IEndpointConventionBuilder MapAdditionalIdentityEndpoints(this IEndpointRouteBuilder endpoints)
@@ -29,46 +30,41 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
 
         manageGroup.MapPost("/LinkExternalLogin", OnLinkingExternalLogin);
 
-        var loggerFactory = endpoints.ServiceProvider.GetRequiredService<ILoggerFactory>();
-        var downloadLogger = loggerFactory.CreateLogger("DownloadPersonalData");
-
-        manageGroup.MapPost("/DownloadPersonalData", async (
-            HttpContext context,
-            [FromServices] UserManager<ApplicationUser> userManager,
-            [FromServices] AuthenticationStateProvider authenticationStateProvider) =>
-        {
-            var user = await userManager.GetUserAsync(context.User);
-            if (user is null)
-            {
-                return Results.NotFound($"Unable to load user with ID '{userManager.GetUserId(context.User)}'.");
-            }
-
-            var userId = await userManager.GetUserIdAsync(user);
-            downloadLogger.LogInformation("User with ID '{UserId}' asked for their personal data.", userId);
-
-            // Only include personal data for download
-            var personalData = new Dictionary<string, string>();
-            var personalDataProps = typeof(ApplicationUser).GetProperties().Where(
-                prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
-            foreach (var p in personalDataProps)
-            {
-                personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
-            }
-
-            var logins = await userManager.GetLoginsAsync(user);
-            foreach (var l in logins)
-            {
-                personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
-            }
-
-            personalData.Add("Authenticator Key", (await userManager.GetAuthenticatorKeyAsync(user))!);
-            var fileBytes = JsonSerializer.SerializeToUtf8Bytes(personalData);
-
-            context.Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
-            return TypedResults.File(fileBytes, contentType: "application/json", fileDownloadName: "PersonalData.json");
-        });
+        manageGroup.MapPost("/DownloadPersonalData", OnDownloadingPersonalData);
 
         return accountGroup;
+    }
+
+    private static async Task<IResult> OnDownloadingPersonalData(HttpContext context, [FromServices] UserManager<ApplicationUser> userManager, [FromServices] AuthenticationStateProvider authenticationStateProvider)
+    {
+        var user = await userManager.GetUserAsync(context.User);
+        if (user is null)
+        {
+            return Results.NotFound($"Unable to load user with ID '{userManager.GetUserId(context.User)}'.");
+        }
+
+        var userId = await userManager.GetUserIdAsync(user);
+        Log.Information($"User with ID '{userId}' asked for their personal data.");
+
+        // Only include personal data for download
+        var personalData = new Dictionary<string, string>();
+        var personalDataProps = typeof(ApplicationUser).GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
+        foreach (var p in personalDataProps)
+        {
+            personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
+        }
+
+        var logins = await userManager.GetLoginsAsync(user);
+        foreach (var l in logins)
+        {
+            personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
+        }
+
+        personalData.Add("Authenticator Key", (await userManager.GetAuthenticatorKeyAsync(user))!);
+        var fileBytes = JsonSerializer.SerializeToUtf8Bytes(personalData);
+
+        context.Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
+        return TypedResults.File(fileBytes, contentType: "application/json", fileDownloadName: "PersonalData.json");
     }
 
     private static async Task<ChallengeHttpResult> OnLinkingExternalLogin(HttpContext context, [FromServices] SignInManager<ApplicationUser> signInManager, [FromForm] string provider)

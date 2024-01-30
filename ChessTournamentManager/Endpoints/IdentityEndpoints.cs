@@ -1,15 +1,10 @@
 using System.Security.Claims;
 using System.Text.Json;
-using ChessTournamentManager.Account.Pages;
-using ChessTournamentManager.Account.Pages.Manage;
 using ChessTournamentManager.Core.User;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using Serilog;
 
 namespace ChessTournamentManager.Endpoints;

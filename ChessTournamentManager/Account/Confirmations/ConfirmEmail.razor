@@ -1,10 +1,9 @@
-﻿@page "/Account/ConfirmEmail"
+﻿@page "/confirm-email"
 
 @using System.Text
 @using ChessTournamentManager.Core.User
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
-@using ChessTournamentManager.Infra
 @using ChessTournamentManager.Services
 
 @inject UserManager<ApplicationUser> UserManager
@@ -12,11 +11,24 @@
 
 <PageTitle>Confirm email</PageTitle>
 
-<h1>Confirm email</h1>
-<StatusMessage Message="@statusMessage" />
+<MudPaper MinHeight="400px" MaxWidth="800px" Elevation="5" Class="p-5 m-auto d-flex">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Typo="Typo.h4" Class="text-center">Confirm your email</MudText>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.body1" Class="text-center">@_statusMessage</MudText>
+        </MudItem>
+        <MudItem xs="12">
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Class="m-auto" Href="/">
+                Back to home
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
 
 @code {
-    private string? statusMessage;
+    private string? _statusMessage;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -38,13 +50,15 @@
         if (user is null)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = $"Error loading user with ID {UserId}";
+            _statusMessage = "We experienced an error looking up your account. Please try again.";
         }
         else
         {
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
             var result = await UserManager.ConfirmEmailAsync(user, code);
-            statusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            _statusMessage = result.Succeeded 
+                ? "Thank you for confirming your email." 
+                : "We experienced an error confirming your email. Please try again.";
         }
     }
 }

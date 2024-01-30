@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Communication.Email" Version="1.0.1" />
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <PackageReference Include="MudBlazor" Version="6.14.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.1" />
@@ -24,6 +26,41 @@
   <ItemGroup>
     <ProjectReference Include="../ChessTournamentManager.Client/ChessTournamentManager.Client.csproj" />
     <ProjectReference Include="..\ChessTournamentManager.Infra\ChessTournamentManager.Infra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Account\Pages\Confirmations\ConfirmEmail.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Confirmations\ConfirmEmailChange.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Confirmations\_Imports.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\ChangePassword.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\DeletePersonalData.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\Email.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\Index.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\PersonalData.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\SetPassword.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\_Imports.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Setup\ForgotPassword.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Setup\Login.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Setup\Register.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Setup\ResendEmailConfirmation.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Setup\_Imports.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Account\Confirmations\ConfirmEmail.razor" />
+    <AdditionalFiles Include="Account\Confirmations\ConfirmEmailChange.razor" />
+    <AdditionalFiles Include="Account\Manage\ChangePassword.razor" />
+    <AdditionalFiles Include="Account\Manage\DeletePersonalData.razor" />
+    <AdditionalFiles Include="Account\Manage\Email.razor" />
+    <AdditionalFiles Include="Account\Manage\Index.razor" />
+    <AdditionalFiles Include="Account\Manage\PersonalData.razor" />
+    <AdditionalFiles Include="Account\Manage\SetPassword.razor" />
+    <AdditionalFiles Include="Account\Manage\_Imports.razor" />
+    <AdditionalFiles Include="Account\Setup\ForgotPassword.razor" />
+    <AdditionalFiles Include="Account\Setup\Login.razor" />
+    <AdditionalFiles Include="Account\Setup\Register.razor" />
+    <AdditionalFiles Include="Account\Setup\ResendEmailConfirmation.razor" />
+    <AdditionalFiles Include="Account\Setup\_Imports.razor" />
   </ItemGroup>
 
 </Project>

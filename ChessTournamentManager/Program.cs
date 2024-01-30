@@ -1,3 +1,5 @@
+using Azure.Communication.Email;
+using Azure.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ using ChessTournamentManager.Core.User;
 using ChessTournamentManager.Infra;
 using ChessTournamentManager.Infra.Seeds;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using MudBlazor.Services;
 using Serilog;
 
@@ -106,7 +109,8 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityEmailSender>();
+builder.Services.AddSingleton<EmailClient>(b => new EmailClient(builder.Configuration["Azure:Communication:Email:ConnectionString"])); 
 
 #endregion
 
@@ -166,8 +170,12 @@ else
 
 app.UseHttpsRedirection();
 
+app.UseAuthorization();
+app.UseAuthentication();
+
 app.UseStaticFiles();
 app.UseAntiforgery();
+
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

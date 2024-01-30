@@ -13,7 +13,9 @@
     <MudNavMenu Margin="Margin.Normal" Rounded="true">
         <AuthorizeView>
             <Authorized>
-                <MudNavLink Href="account" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ManageAccounts">@context.User.Identity?.Name</MudNavLink>
+                <MudNavLink Href="account" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ManageAccounts">
+                    Manage
+                </MudNavLink>
                 <div class="mud-nav-item mud-ripple">
                     <form action="/logout" method="post">
                         <AntiforgeryToken />

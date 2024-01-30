@@ -1,0 +1,33 @@
+﻿@using Serilog
+@inherits LayoutComponentBase
+@layout Layout.MainLayout
+@inject NavigationManager NavigationManager
+
+@if (HttpContext is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @Body
+}
+
+@code {
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (HttpContext is not null)
+        {
+            return;
+        }
+
+        // If this code runs, we're currently rendering in interactive mode, so there is no HttpContext.
+        // The identity pages need to set cookies, so they require an HttpContext. To achieve this we
+        // must transition back from interactive mode to a server-rendered page.
+        
+        Log.Information("Transitioning from interactive mode to server-rendered mode.");
+        NavigationManager.Refresh(forceReload: true);
+    }
+}

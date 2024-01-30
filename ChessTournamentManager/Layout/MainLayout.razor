@@ -4,10 +4,10 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<MudLayout>
+<MudLayout Style="height: 100vh; width: 100vw;">
     <NavRail />
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-8 pt-4">
+    <MudMainContent Class="h-100">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="h-100 d-flex flex-column justify-content-center">
             @Body
         </MudContainer>
     </MudMainContent>

@@ -25,6 +25,7 @@
     {
         <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register"
                   class="w-50 h-100">
+            <StatusMessage Message="@_statusMessage"/>
             <DataAnnotationsValidator/>
             <h2>Create a new account</h2>
             <hr/>
@@ -34,7 +35,7 @@
                         <MudTextField Label="First Name" @bind-Value="Input.FirstName" HelperText="Max. 50 characters"
                                       For="@(() => Input.FirstName)"/>
                         <MudTextField Label="Last Name" @bind-Value="Input.LastName" HelperText="Max. 50 characters"
-                                      For="@(() => Input.LastName)"/>    
+                                      For="@(() => Input.LastName)"/>
                     </div>
                     <MudTextField Label="Email" @bind-Value="Input.Email" HelperText="Enter your email address"
                                   For="@(() => Input.Email)" InputType="InputType.Email"/>
@@ -48,11 +49,11 @@
                         Register
                     </MudButton>
                     <p>
-                        Been here before? 
+                        Been here before?
                         <MudLink Color="Color.Primary"
                                  Href="@NavigationManager.GetUriWithQueryParameters("login", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl })">
                             Log in
-                        </MudLink> 
+                        </MudLink>
                     </p>
                 </div>
             </div>
@@ -72,6 +73,7 @@
 
 @code {
     private bool _registrationSuccessful;
+    private string? _statusMessage;
     
     [SupplyParameterFromForm] private InputModel Input { get; set; } = new();
 
@@ -96,6 +98,7 @@
 
         if (!result.Succeeded)
         {
+            _statusMessage = "An error occurred while creating the account.";
             return;
         }
 
@@ -106,6 +109,7 @@
             await SendConfirmationEmail(user);
             
             _registrationSuccessful = true;
+            StateHasChanged();
             return;
         }
 
@@ -145,7 +149,7 @@
         public string Email { get; set; } = "";
 
         [Required(ErrorMessage = "Password is required")]
-        [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,64}$",
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\-_]).{8,64}$",
             ErrorMessage = "Password is not valid, it must be between 8 - 64 characters and contain a number, a capital letter, and a special character")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]

@@ -5,7 +5,7 @@ namespace ChessTournamentManager.Infra.Seeds;
 
 public static class DefaultClaims
 {
-    public static async Task SeedAsync(this RoleManager<IdentityRole> roleManager)
+    public static async Task SeedClaimsAsync(this RoleManager<IdentityRole<Guid>> roleManager)
     {
         var adminRole = await roleManager.FindByNameAsync(Role.Admin.ToString());
         var playerRole = await roleManager.FindByNameAsync(Role.Player.ToString());
@@ -33,7 +33,7 @@ public static class DefaultClaims
         }
     }
     
-    private static async Task SeedForAdminAsync(this RoleManager<IdentityRole> roleManager, IdentityRole adminRole)
+    private static async Task SeedForAdminAsync(this RoleManager<IdentityRole<Guid>> roleManager, IdentityRole<Guid> adminRole)
     {
         var allClaims = await roleManager.GetClaimsAsync(adminRole);
 
@@ -53,17 +53,17 @@ public static class DefaultClaims
         }
     }
 
-    private static async Task SeedForPlayerAsync(this RoleManager<IdentityRole> roleManager, IdentityRole playerRole)
+    private static async Task SeedForPlayerAsync(this RoleManager<IdentityRole<Guid>> roleManager, IdentityRole<Guid> playerRole)
     {
         var permissions = new[]
         {
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Create),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Update),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Delete),
-            Permissions.GeneratePermission(Module.Games, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.Tournaments, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.Results, Permissions.Permission.Read)
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Create),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Read),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Update),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Delete),
+            Permissions.GeneratePermission(Module.Games, Permission.Read),
+            Permissions.GeneratePermission(Module.Tournaments, Permission.Read),
+            Permissions.GeneratePermission(Module.Results, Permission.Read)
         };
         var allClaims = await roleManager.GetClaimsAsync(playerRole);
         
@@ -78,22 +78,22 @@ public static class DefaultClaims
         }
     }
     
-    private static async Task SeedForOrganizerAsync(this RoleManager<IdentityRole> roleManager, IdentityRole organizerRole)
+    private static async Task SeedForOrganizerAsync(this RoleManager<IdentityRole<Guid>> roleManager, IdentityRole<Guid> organizerRole)
     {
         var permissions = new[]
         {
-            Permissions.GeneratePermission(Module.Tournaments, Permissions.Permission.Create),
-            Permissions.GeneratePermission(Module.Tournaments, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.Tournaments, Permissions.Permission.Update),
-            Permissions.GeneratePermission(Module.Tournaments, Permissions.Permission.Delete),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Create),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Update),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Delete),
-            Permissions.GeneratePermission(Module.Games, Permissions.Permission.Create),
-            Permissions.GeneratePermission(Module.Games, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.Games, Permissions.Permission.Update),
-            Permissions.GeneratePermission(Module.Games, Permissions.Permission.Delete),
+            Permissions.GeneratePermission(Module.Tournaments, Permission.Create),
+            Permissions.GeneratePermission(Module.Tournaments, Permission.Read),
+            Permissions.GeneratePermission(Module.Tournaments, Permission.Update),
+            Permissions.GeneratePermission(Module.Tournaments, Permission.Delete),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Create),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Read),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Update),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Delete),
+            Permissions.GeneratePermission(Module.Games, Permission.Create),
+            Permissions.GeneratePermission(Module.Games, Permission.Read),
+            Permissions.GeneratePermission(Module.Games, Permission.Update),
+            Permissions.GeneratePermission(Module.Games, Permission.Delete),
         };
         var allClaims = await roleManager.GetClaimsAsync(organizerRole);
         
@@ -108,18 +108,18 @@ public static class DefaultClaims
         }
     }
     
-    private static async Task SeedForRefereeAsync(this RoleManager<IdentityRole> roleManager, IdentityRole refereeRole)
+    private static async Task SeedForRefereeAsync(this RoleManager<IdentityRole<Guid>> roleManager, IdentityRole<Guid> refereeRole)
     {
         var permissions = new[]
         {
-            Permissions.GeneratePermission(Module.Tournaments, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.TournamentPlayers, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.Games, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.Games, Permissions.Permission.Update),
-            Permissions.GeneratePermission(Module.Results, Permissions.Permission.Create),
-            Permissions.GeneratePermission(Module.Results, Permissions.Permission.Read),
-            Permissions.GeneratePermission(Module.Results, Permissions.Permission.Update),
-            Permissions.GeneratePermission(Module.Results, Permissions.Permission.Delete),
+            Permissions.GeneratePermission(Module.Tournaments, Permission.Read),
+            Permissions.GeneratePermission(Module.TournamentPlayers, Permission.Read),
+            Permissions.GeneratePermission(Module.Games, Permission.Read),
+            Permissions.GeneratePermission(Module.Games, Permission.Update),
+            Permissions.GeneratePermission(Module.Results, Permission.Create),
+            Permissions.GeneratePermission(Module.Results, Permission.Read),
+            Permissions.GeneratePermission(Module.Results, Permission.Update),
+            Permissions.GeneratePermission(Module.Results, Permission.Delete),
         };
         var allClaims = await roleManager.GetClaimsAsync(refereeRole);
         

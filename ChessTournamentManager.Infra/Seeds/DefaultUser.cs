@@ -11,6 +11,7 @@ public static class DefaultUser
         {   
             FirstName = string.Empty,
             LastName = string.Empty,
+            UserName = "admin@localhost",
             Email = "admin@localhost",
             EmailConfirmed = true
         };

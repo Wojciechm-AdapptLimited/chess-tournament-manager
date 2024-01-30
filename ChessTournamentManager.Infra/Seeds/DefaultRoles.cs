@@ -4,7 +4,7 @@ namespace ChessTournamentManager.Infra.Seeds;
 
 public static class DefaultRoles
 {
-    public static async Task SeedAsync(this RoleManager<IdentityRole> roleManager)
+    public static async Task SeedAsync(this RoleManager<IdentityRole<Guid>> roleManager)
     {
         foreach (var role in Enum.GetNames<Role>())
         {
@@ -13,7 +13,7 @@ public static class DefaultRoles
                 continue;
             }
 
-            await roleManager.CreateAsync(new IdentityRole(role));
+            await roleManager.CreateAsync(new IdentityRole<Guid>(role));
         }
     }
 }

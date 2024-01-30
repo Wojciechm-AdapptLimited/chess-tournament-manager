@@ -1,5 +1,59 @@
-<h3>NavRail</h3>
+@inherits MudComponentBase
+
+@inject NavigationManager NavigationManager
+
+<MudDrawer Elevation="1" Variant="DrawerVariant.Mini" Class="nav-rail" MiniWidth="100px">
+    <MudNavMenu Margin="Margin.Normal" Rounded="true">
+        <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        <MudNavLink Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Collections">Gallery</MudNavLink>
+        <MudNavLink Href="weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.History">History</MudNavLink>
+        <MudNavLink Href="auth" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Lock">Auth</MudNavLink>
+    </MudNavMenu>
+    <MudSpacer />
+    <MudNavMenu Margin="Margin.Normal" Rounded="true">
+        <AuthorizeView>
+            <Authorized>
+                <MudNavLink Href="account" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ManageAccounts">@context.User.Identity?.Name</MudNavLink>
+                <div class="mud-nav-item mud-ripple">
+                    <form action="/logout" method="post">
+                        <AntiforgeryToken />
+                        <input type="hidden" name="ReturnUrl" value="@_currentUrl" />
+                        <button type="submit" class="mud-nav-link">
+                            <MudIcon Icon="@Icons.Material.Filled.Logout" Class="mud-nav-link-icon mud-nav-link-icon-default" />
+                            <span class="mud-nav-link-text" aria-hidden="true">Logout</span>
+                        </button>
+                    </form>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <MudNavLink Href="register" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AppRegistration" ForceLoad="true">
+                    Register
+                </MudNavLink>
+                <MudNavLink Href="login" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Login" ForceLoad="true">
+                    Login
+                </MudNavLink>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudNavMenu>
+</MudDrawer>
 
 @code {
-    
+    private string? _currentUrl;
+
+    protected override void OnInitialized()
+    {
+        _currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        _currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
 }

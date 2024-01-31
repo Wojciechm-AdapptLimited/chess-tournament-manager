@@ -1,0 +1,33 @@
+@page "/account"
+
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+
+<MudGrid Class="gap-4">
+    @foreach(var link in _links)
+    {
+        <MudGridItem xs="12" sm="6" class="cursor-pointer">
+            <MudPaper onclick="@(() => NavigationManager.NavigateTo(link.Value.Item1))" 
+                      Width="250px" Height="250px" Elevation="3" 
+                      Class="d-flex flex-column justify-content-around align-items-center text-center text-break profile-card-menu-item">
+                <MudIcon Icon="@link.Value.Item2" Color="Color.Dark" Style="font-size: 5rem;" />
+                <MudText Typo="Typo.h4" Class="w-75">@link.Key</MudText>
+            </MudPaper> 
+        </MudGridItem>
+    }
+</MudGrid>
+
+@code {
+    private readonly Dictionary<string, (string, string)> _links = new()
+    {
+        { "User Profile", ("/account/profile", Icons.Material.Filled.Person) },
+        { "Security", ("/account/security", Icons.Material.Filled.Security) },
+        { "Contact", ("/account/contact", Icons.Material.Filled.Email) },
+        { "Settings", ("/account/settings", Icons.Material.Filled.Settings) },
+        { "Player Profile", ("/account/player", Icons.Custom.Uncategorized.ChessQueen) },
+        { "Referee Profile", ("/account/referee", Icons.Material.Filled.RemoveRedEye) },
+        { "Organizer Profile", ("/account/organizer", Icons.Material.Filled.EventSeat)},
+        { "Help", ("/account/help", Icons.Material.Filled.Help) }
+    };
+}

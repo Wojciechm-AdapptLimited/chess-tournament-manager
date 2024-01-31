@@ -43,7 +43,7 @@
     {
         if (UserId is null || Code is null)
         {
-            RedirectManager.RedirectTo("");
+            RedirectManager.RedirectToWithStatus("/login", "Email confirmation link is invalid.", HttpContext);
         }
 
         var user = await UserManager.FindByIdAsync(UserId);

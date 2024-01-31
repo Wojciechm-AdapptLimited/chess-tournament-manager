@@ -12,12 +12,25 @@
 
 <PageTitle>Confirm email change</PageTitle>
 
-<h1>Confirm email change</h1>
+<MudPaper MinHeight="400px" MaxWidth="800px" Elevation="5" Class="p-5 m-auto d-flex">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Typo="Typo.h4" Class="text-center">Confirm your email change</MudText>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.body1" Class="text-center">@_message</MudText>
+        </MudItem>
+        <MudItem xs="12">
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Class="m-auto" Href="/">
+                Back to home
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
 
-<StatusMessage Message="@message" />
 
 @code {
-    private string? message;
+    private string? _message;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -40,17 +53,21 @@
         }
 
         var user = await UserManager.FindByIdAsync(UserId);
+        
         if (user is null)
         {
-            message = "Unable to find user with Id '{userId}'";
+            _message = "We experienced an error looking up your account.";
+            StateHasChanged();
             return;
         }
 
         var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
         var result = await UserManager.ChangeEmailAsync(user, Email, code);
+        
         if (!result.Succeeded)
         {
-            message = "Error changing email.";
+            _message = "We experienced an error changing your email.";
+            StateHasChanged();
             return;
         }
 
@@ -59,11 +76,13 @@
         var setUserNameResult = await UserManager.SetUserNameAsync(user, Email);
         if (!setUserNameResult.Succeeded)
         {
-            message = "Error changing user name.";
+            _message = "We experienced an error changing your user name.";
+            StateHasChanged();
             return;
         }
 
         await SignInManager.RefreshSignInAsync(user);
-        message = "Thank you for confirming your email change.";
+        _message = "Thank you for confirming your email change.";
+        StateHasChanged();
     }
 }
